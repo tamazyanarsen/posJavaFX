@@ -1,20 +1,16 @@
 package sample;
 
-import com.supermax.javapos.service.SuperConst;
-import com.supermax.javapos.service.SuperJposServiceInstanceFactory;
 import com.supermax.javapos.service.SuperScan;
-import com.supermax.javapos.so.*;
-import com.supermax.javapos.test.JposTest;
-import com.supermax.test.SuperJposSample;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import jpos.BaseControl;
+import jpos.config.simple.SimpleEntry;
+import jpos.config.simple.xml.SimpleXmlRegPopulator;
 import jpos.events.*;
 import jpos.services.EventCallbacks;
-//import javax.comm.UnsupportedCommOperationException;
 
 public class Main extends Application {
 
@@ -29,37 +25,44 @@ public class Main extends Application {
         });
 
         SuperScan superScan = new SuperScan();
-        superScan.open("DLS-Magellan-RS232-Scanner-2200", new EventCallbacks() {
-            @Override
-            public void fireDataEvent(DataEvent dataEvent) {
+        SimpleEntry simpleEntry = new SimpleEntry(new SimpleXmlRegPopulator());
+        superScan.setJposEntry(simpleEntry);
+        try {
+            superScan.open("DL-Portal-Scanner", new EventCallbacks() {
+                @Override
+                public void fireDataEvent(DataEvent dataEvent) {
 
-            }
+                }
 
-            @Override
-            public void fireDirectIOEvent(DirectIOEvent directIOEvent) {
+                @Override
+                public void fireDirectIOEvent(DirectIOEvent directIOEvent) {
 
-            }
+                }
 
-            @Override
-            public void fireErrorEvent(ErrorEvent errorEvent) {
+                @Override
+                public void fireErrorEvent(ErrorEvent errorEvent) {
 
-            }
+                }
 
-            @Override
-            public void fireOutputCompleteEvent(OutputCompleteEvent outputCompleteEvent) {
+                @Override
+                public void fireOutputCompleteEvent(OutputCompleteEvent outputCompleteEvent) {
 
-            }
+                }
 
-            @Override
-            public void fireStatusUpdateEvent(StatusUpdateEvent statusUpdateEvent) {
+                @Override
+                public void fireStatusUpdateEvent(StatusUpdateEvent statusUpdateEvent) {
 
-            }
+                }
 
-            @Override
-            public BaseControl getEventSource() {
-                return null;
-            }
-        });
+                @Override
+                public BaseControl getEventSource() {
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+            throw e;
+//            e.printStackTrace();
+        }
 
         gridPane.getChildren().add(open);
         primaryStage.setScene(new Scene(gridPane, 300, 275));
